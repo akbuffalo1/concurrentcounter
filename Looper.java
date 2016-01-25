@@ -9,19 +9,23 @@ import java.util.concurrent.Executors;
  */
 public final class Looper extends Thread implements Runnable{
 	private static Looper sINSTANCE;
+    static{
+        sINSTANCE = new Looper();
+    }
 	
     private final ExecutorService executor;
     private BlockingQueue<Runnable> mOperationsQueue;
 
-    private Looper(BlockingQueue<Runnable> _operationQueue){
-        mOperationsQueue = _operationQueue;
+    private Looper(){
         executor = Executors.newFixedThreadPool(5);
     }
+
+    public void init(BlockingQueue<Runnable> _operationQueue){
+        if(mOperationsQueue == null)
+            mOperationsQueue = _operationQueue;
+    }
     
-    public static Looper getInstance(BlockingQueue<Runnable> _operationQueue){
-    	if(sINSTANCE == null){
-    		sINSTANCE = new Looper(_operationQueue);
-    	}
+    public static Looper getInstance(){
     	return sINSTANCE;
     }
 

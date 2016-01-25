@@ -8,20 +8,24 @@ import java.util.concurrent.Executors;
  * Created by and on 24.01.16.
  */
 public final class Logger extends Thread implements Runnable {
-	private static Logger sINSTANCE;
+	private static final Logger sINSTANCE;
+    static{
+        sINSTANCE = new Logger();
+    }
 	
     private BlockingQueue<Runnable> mLogQueue;
     private ExecutorService executor;
 
-    private Logger(BlockingQueue<Runnable> _logQueue){
-        mLogQueue = _logQueue;
+    private Logger(){
         executor = Executors.newFixedThreadPool(5);
     }
+
+    public void init(BlockingQueue<Runnable> _logQueue){
+        if(mLogQueue == null)
+            mLogQueue = _logQueue;
+    }
     
-    public static Logger getInstance(BlockingQueue<Runnable> _logQueue){
-    	if(sINSTANCE == null){
-    		sINSTANCE = new Logger(_logQueue);
-    	}
+    public static Logger getInstance(){
     	return sINSTANCE;
     }
 
