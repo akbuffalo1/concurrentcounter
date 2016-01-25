@@ -8,13 +8,13 @@ import java.util.concurrent.BlockingQueue;
 public class Operation implements Runnable {
     private BlockingQueue<Runnable> mLogQueue;
     private int[] mArray;
-    private static volatile int mTotalSumm = 0;
-    private static volatile int mCounter = 0;
+    private static volatile int sTotalSumm = 0;
+    private static volatile int sCounter = 0;
     private int count;
     public Operation(int[] _array, BlockingQueue<Runnable> _loggerQueue){
         mArray = _array;
         mLogQueue = _loggerQueue;
-        count = ++mCounter;
+        count = ++sCounter;
     }
 
     public static Operation newInstance(int[] _array, BlockingQueue<Runnable> _loggerQueue){
@@ -23,7 +23,7 @@ public class Operation implements Runnable {
     @Override
     public void run() {
         int result = Calculator.calculate(mArray);
-        mTotalSumm += result;
-        mLogQueue.add(new Log(String.format(Consts.MESSAGE_TEMPLATE, count, result, mTotalSumm)));
+        sTotalSumm += result;
+        mLogQueue.add(new Log(String.format(Consts.MESSAGE_TEMPLATE, count, result, sTotalSumm)));
     }
 }
