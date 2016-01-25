@@ -12,7 +12,7 @@ public class Parser {
     }
 
     public void parseString(String _str){
-        if(mHandler != null){
+        if(mHandler != null && _str != null){
             if(!_str.isEmpty()){
                 String[] strResult = _str.split(" ");
 

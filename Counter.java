@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Counter implements Parser.Handler{
     private BlockingQueue<Runnable> mOperationQueue;
@@ -15,8 +15,8 @@ public class Counter implements Parser.Handler{
 
     private Counter() throws InterruptedException {
         mParser = new Parser(this);
-        mOperationQueue = new LinkedBlockingDeque<>(100);
-        mLogQueue = new LinkedBlockingDeque<>(100);
+        mOperationQueue = new LinkedBlockingQueue<>(100);
+        mLogQueue = new LinkedBlockingQueue<>(100);
         mOperationLooper = new Looper(mOperationQueue);
         mOperationLooper.start();
         mLogger = new Logger(mLogQueue);

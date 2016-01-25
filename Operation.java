@@ -10,9 +10,11 @@ public class Operation implements Runnable {
     private int[] mArray;
     private static volatile int mTotalSumm = 0;
     private static volatile int mCounter = 0;
+    private int count;
     public Operation(int[] _array, BlockingQueue<Runnable> _loggerQueue){
         mArray = _array;
         mLogQueue = _loggerQueue;
+        count = ++mCounter;
     }
 
     public static Operation newInstance(int[] _array, BlockingQueue<Runnable> _loggerQueue){
@@ -22,6 +24,6 @@ public class Operation implements Runnable {
     public void run() {
         int result = Calculator.calculate(mArray);
         mTotalSumm += result;
-        mLogQueue.add(new Log(String.format(Consts.MESSAGE_TEMPLATE, ++mCounter, result, mTotalSumm)));
+        mLogQueue.add(new Log(String.format(Consts.MESSAGE_TEMPLATE, count, result, mTotalSumm)));
     }
 }
