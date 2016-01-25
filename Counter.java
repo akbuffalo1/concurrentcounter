@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Counter implements Parser.Handler{
+public final class Counter implements Parser.Handler{
+	private static Counter sINSTANCE;
+	
     private BlockingQueue<Runnable> mOperationQueue;
     private BlockingQueue<Runnable> mLogQueue;
     private Parser mParser;
@@ -17,14 +19,21 @@ public class Counter implements Parser.Handler{
         mParser = new Parser(this);
         mOperationQueue = new LinkedBlockingQueue<>(100);
         mLogQueue = new LinkedBlockingQueue<>(100);
-        mOperationLooper = new Looper(mOperationQueue);
+        mOperationLooper = Looper.getInstance(mOperationQueue);
         mOperationLooper.start();
-        mLogger = new Logger(mLogQueue);
+        mLogger = Logger.getInstance(mLogQueue);
         mLogger.start();
+    }
+    
+    public static Counter getInstance() throws InterruptedException{
+    	if(sINSTANCE == null){
+    		sINSTANCE = new Counter();
+    	}
+    	return sINSTANCE;
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
+        Counter counter = Counter.getInstance();
         counter.init();
     }
 
